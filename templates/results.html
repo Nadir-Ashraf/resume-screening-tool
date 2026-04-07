@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Screening Results</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<h1>Resume Ranking Results</h1>
+
+<table border="1">
+
+<tr>
+<th>Rank</th>
+<th>Resume</th>
+<th>Similarity Score</th>
+</tr>
+
+{% for r in results %}
+
+<tr>
+<td>{{ loop.index }}</td>
+<td>{{ r.resume }}</td>
+<td>{{ r.score }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+<a href="/">Upload More Resumes</a>
+
+</body>
+</html>

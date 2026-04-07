@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request
 import os
+
 from resume_parser import extract_text
-from matcher import match_resumes
+from matcher import rank_resumes
 
 app = Flask(__name__)
 
@@ -17,21 +18,30 @@ def index():
 @app.route("/upload", methods=["POST"])
 def upload():
 
-    jd = request.form["jd"]
+    job_description = request.form["jd"]
+
     files = request.files.getlist("resumes")
 
     resumes = []
 
     for file in files:
+
+        if file.filename == "":
+            continue
+
         path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
         file.save(path)
 
         text = extract_text(path)
-        resumes.append((file.filename, text))
 
-    ranked = match_resumes(jd, resumes)
+        resumes.append({
+            "name": file.filename,
+            "text": text
+        })
 
-    return str(ranked)
+    results = rank_resumes(job_description, resumes)
+
+    return render_template("results.html", results=results)
 
 
 if __name__ == "__main__":

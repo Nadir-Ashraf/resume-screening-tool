@@ -7,12 +7,16 @@ def extract_text(file_path):
     text = ""
 
     if file_path.endswith(".pdf"):
+
         reader = PyPDF2.PdfReader(file_path)
 
         for page in reader.pages:
-            text += page.extract_text()
+            content = page.extract_text()
+            if content:
+                text += content
 
     elif file_path.endswith(".docx"):
+
         doc = docx.Document(file_path)
 
         for para in doc.paragraphs:

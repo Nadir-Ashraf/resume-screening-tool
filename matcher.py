@@ -2,26 +2,30 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def match_resumes(jd, resumes):
+def rank_resumes(job_description, resumes):
 
-    texts = [jd]
+    documents = [job_description]
 
-    for name, resume in resumes:
-        texts.append(resume)
+    for r in resumes:
+        documents.append(r["text"])
 
-    vectorizer = TfidfVectorizer()
-    vectors = vectorizer.fit_transform(texts)
+    vectorizer = TfidfVectorizer(stop_words="english")
+
+    vectors = vectorizer.fit_transform(documents)
 
     jd_vector = vectors[0]
 
     scores = []
 
-    for i in range(1, len(texts)):
+    for i in range(1, vectors.shape[0]):   # FIXED HERE
 
         similarity = cosine_similarity(jd_vector, vectors[i])[0][0]
 
-        scores.append((resumes[i-1][0], similarity))
+        scores.append({
+            "resume": resumes[i-1]["name"],
+            "score": round(float(similarity), 3)
+        })
 
-    scores.sort(key=lambda x: x[1], reverse=True)
+    scores.sort(key=lambda x: x["score"], reverse=True)
 
     return scores
