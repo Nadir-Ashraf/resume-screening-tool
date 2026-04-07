@@ -2,15 +2,98 @@
 <html>
 
 <head>
-<title>Screening Results</title>
+
+<title>Resume Screening Results</title>
 <link rel="stylesheet" href="/static/style.css">
+
+<style>
+
+body{
+font-family: Arial, Helvetica, sans-serif;
+background:#f4f6f9;
+margin:0;
+padding:0;
+}
+
+.container{
+width:80%;
+margin:50px auto;
+background:white;
+padding:40px;
+border-radius:10px;
+box-shadow:0px 5px 20px rgba(0,0,0,0.1);
+}
+
+h1{
+text-align:center;
+color:#2c3e50;
+margin-bottom:30px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th{
+background:#3498db;
+color:white;
+padding:12px;
+}
+
+td{
+padding:10px;
+text-align:center;
+border-bottom:1px solid #ddd;
+}
+
+tr:hover{
+background:#f2f2f2;
+}
+
+.skill{
+background:#ecf0f1;
+padding:4px 8px;
+margin:2px;
+display:inline-block;
+border-radius:4px;
+font-size:13px;
+}
+
+.match{
+background:#2ecc71;
+color:white;
+padding:4px 8px;
+margin:2px;
+display:inline-block;
+border-radius:4px;
+font-size:13px;
+}
+
+.back-btn{
+display:inline-block;
+margin-top:25px;
+padding:12px 20px;
+background:#2ecc71;
+color:white;
+text-decoration:none;
+border-radius:6px;
+}
+
+.back-btn:hover{
+background:#27ae60;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>Resume Ranking Results</h1>
+<h1>AI Resume Screening Results</h1>
 
 <table>
 
@@ -18,23 +101,56 @@
 <th>Rank</th>
 <th>Resume</th>
 <th>Similarity Score</th>
+<th>Extracted Skills</th>
+<th>Matched Skills</th>
 </tr>
 
 {% for r in results %}
 
 <tr>
+
 <td>{{ loop.index }}</td>
+
 <td>{{ r.resume }}</td>
+
 <td>{{ r.score }}</td>
+
+<td>
+
+{% for skill in r.skills %}
+<span class="skill">{{ skill }}</span>
+{% endfor %}
+
+</td>
+
+<td>
+
+{% if r.matched %}
+
+{% for skill in r.matched %}
+<span class="match">{{ skill }}</span>
+{% endfor %}
+
+{% else %}
+
+<span>No Match</span>
+
+{% endif %}
+
+</td>
+
 </tr>
 
 {% endfor %}
 
 </table>
 
+<br>
+
 <a href="/" class="back-btn">Upload More Resumes</a>
 
 </div>
 
 </body>
+
 </html>
