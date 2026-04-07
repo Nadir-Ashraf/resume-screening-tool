@@ -8,23 +8,24 @@
 
 <body>
 
+<div class="container">
+
 <h1>AI Resume Screening Tool</h1>
+<p class="subtitle">Upload resumes and match them with job description using AI</p>
 
 <form action="/upload" method="post" enctype="multipart/form-data">
 
-<label>Job Description</label><br>
-<textarea name="jd" rows="8" cols="60"></textarea>
+<label>Job Description</label>
+<textarea name="jd" placeholder="Paste job description here..."></textarea>
 
-<br><br>
-
-<label>Upload Resumes</label><br>
+<label>Upload Resumes</label>
 <input type="file" name="resumes" multiple>
-
-<br><br>
 
 <button type="submit">Screen Resumes</button>
 
 </form>
+
+</div>
 
 </body>
 </html>
