@@ -1,28 +1,26 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
 def rank_resumes(job_description, resumes):
 
-    documents = [job_description]
-
-    for r in resumes:
-        documents.append(r["text"])
-
-    vectorizer = TfidfVectorizer(stop_words="english")
-
-    vectors = vectorizer.fit_transform(documents)
-
-    jd_vector = vectors[0]
+    jd_embedding = model.encode(job_description)
 
     scores = []
 
-    for i in range(1, vectors.shape[0]):   # FIXED HERE
+    for resume in resumes:
 
-        similarity = cosine_similarity(jd_vector, vectors[i])[0][0]
+        resume_embedding = model.encode(resume["text"])
+
+        similarity = cosine_similarity(
+            [jd_embedding],
+            [resume_embedding]
+        )[0][0]
 
         scores.append({
-            "resume": resumes[i-1]["name"],
+            "resume": resume["name"],
             "score": round(float(similarity), 3)
         })
 

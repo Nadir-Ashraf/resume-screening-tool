@@ -11,7 +11,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
 @app.route("/")
-def index():
+def home():
     return render_template("index.html")
 
 
@@ -19,7 +19,6 @@ def index():
 def upload():
 
     job_description = request.form["jd"]
-
     files = request.files.getlist("resumes")
 
     resumes = []
@@ -29,10 +28,10 @@ def upload():
         if file.filename == "":
             continue
 
-        path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
-        file.save(path)
+        filepath = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+        file.save(filepath)
 
-        text = extract_text(path)
+        text = extract_text(filepath)
 
         resumes.append({
             "name": file.filename,
